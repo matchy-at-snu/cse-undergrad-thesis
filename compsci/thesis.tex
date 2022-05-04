@@ -64,6 +64,18 @@
 \DTMsetdatestyle{kordate}
 
 %%
+%% Set up abstract environment
+%%
+\renewenvironment{abstract}
+  {\begin{center}
+    {\Large\bfseries Abstract \\}}
+  {\end{center}}
+\newenvironment{abstract*} % korean
+  {\begin{center}
+    {\Large\bfseries 국문초록 \\}}
+  {\end{center}}
+
+%%
 %% Set up title styles
 %%
 \titleformat{name=\chapter}
@@ -90,7 +102,12 @@
 
 \begin{document}
 
+% 외표지
+\input{titlepage}
 
+\pagebreak
+
+% 속표지
 \input{titlepage}
 
 \pagebreak
