@@ -1,16 +1,106 @@
-\documentclass{article}
-\usepackage{fancyhdr}
-% It is highly likely that I have to use HWP to compose my biological sciences thesis :/
+\documentclass[11pt]{report}
+\usepackage[
+    a4paper,
+    top=30mm,
+    right=25mm,
+    left=25mm,
+    bottom=15mm
+]{geometry}
+\usepackage{datetime2}
+\usepackage{setspace} % Set spacing
+\usepackage{titlesec}
+\usepackage{kotex} % Korean support
 
-\title{Thesis}
-\author{Matchy Lee}
+% Set up font sizes
+\makeatletter
+\newcommand{\HUGE}{\@setfontsize\HUGE{24pt}{18}}
+\renewcommand\Huge{\@setfontsize\Huge{22pt}{18}}
+\renewcommand\huge{\@setfontsize\huge{20pt}{18}}
+\renewcommand\LARGE{\@setfontsize\LARGE{18pt}{18}}
+\renewcommand\Large{\@setfontsize\Large{16pt}{18}}
+\renewcommand\large{\@setfontsize\large{14pt}{18}}
+\let\@oldtitle=\title
+\makeatother
+
+% Define alternative (Korean) title macro
+\makeatletter
+\renewcommand{\title}{
+  \@ifstar{\@kor@title}{\@oldtitle}
+}
+\newcommand{\@kor@title}[1]{%
+  \renewcommand{\@titlealt}{#1}
+}%
+\newcommand{\@titlealt}{%
+  \@latex@error{No \noexpand\title* given}\@ehc
+}%
+\makeatother
+
+% Define supervisor macro
+\makeatletter
+\newcommand{\advisor}[1]{%
+  \renewcommand{\@advisor}{#1}
+}%
+\newcommand{\@advisor}{%
+  \@latex@error{No \noexpand\advisor given}\@ehc
+}%
+\makeatother
+
+% Set up Korean datetime format
+\DTMnewdatestyle{kordate}% label
+{% definitions
+  \renewcommand*{\DTMdisplaydate}[4]{%
+    \number##1년 \number##2월 \number##3일
+  }%
+  \renewcommand*{\DTMDisplaydate}{\DTMdisplaydate}
+}%
+\DTMsetdatestyle{kordate}
+
+% Set up title styles
+
+% \renewcommand{\abstractname}{\Large Abstract}
+\titleformat{name=\chapter}
+  [display]{\LARGE\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
+\titleformat{name=\section}
+  [block]{\Large\bfseries}{\thesection}{1em}{}[]
+\titleformat{name=\section,numberless}
+  [block]{\Large\bfseries}{\thesection}{1em}{}[]
+
+
+\doublespacing
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%% Basic file information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Secure Multiparty Computing (MPC) Module for RSA Keypair Generation and Message Decryption}
+\title*{제목}
+
+\author{Matchy Volynskaya}
+\advisor{Bernard Egger}
 
 \begin{document}
 
-\maketitle
+
+\input{titlepage}
 
 \pagebreak
 
+\input{abstract}
+
+\pagebreak
+
+\tableofcontents
+
+\pagebreak
+
+\chapter{A chapter}
+
 \section{A section}
+
+\subsection{A subsection}
+
+\pagebreak
+
+\input{abstract_kor}
 
 \end{document}
