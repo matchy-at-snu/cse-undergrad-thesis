@@ -11,7 +11,9 @@
 \usepackage{titlesec}
 \usepackage{kotex} % Korean support
 
-% Set up font sizes
+%%
+%% Set up font sizes
+%%
 \makeatletter
 \newcommand{\HUGE}{\@setfontsize\HUGE{24pt}{18}}
 \renewcommand\Huge{\@setfontsize\Huge{22pt}{18}}
@@ -21,7 +23,9 @@
 \renewcommand\large{\@setfontsize\large{14pt}{18}}
 \makeatother
 
-% Define alternative (Korean) title macro
+%%
+%% Define alternative (Korean) title macro
+%%
 \makeatletter
 \let\@oldtitle=\title
 \renewcommand{\title}{
@@ -35,7 +39,9 @@
 }%
 \makeatother
 
-% Define supervisor macro
+%%
+%% Define supervisor macro
+%%
 \makeatletter
 \newcommand{\advisor}[1]{%
   \renewcommand{\@advisor}{#1}
@@ -45,7 +51,9 @@
 }%
 \makeatother
 
-% Set up Korean datetime format
+%%
+%% Set up Korean datetime format
+%%
 \DTMnewdatestyle{kordate}% label
 {% definitions
   \renewcommand*{\DTMdisplaydate}[4]{%
@@ -55,7 +63,9 @@
 }%
 \DTMsetdatestyle{kordate}
 
-% Set up title styles
+%%
+%% Set up title styles
+%%
 \titleformat{name=\chapter}
   [display]{\LARGE\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
 \titleformat{name=\section}
@@ -63,7 +73,9 @@
 \titleformat{name=\section,numberless}
   [block]{\Large\bfseries}{\thesection}{1em}{}[]
 
-
+%%
+%% Set up spacing
+%%
 \doublespacing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
