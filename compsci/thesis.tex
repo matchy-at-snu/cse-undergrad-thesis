@@ -19,11 +19,11 @@
 \renewcommand\LARGE{\@setfontsize\LARGE{18pt}{18}}
 \renewcommand\Large{\@setfontsize\Large{16pt}{18}}
 \renewcommand\large{\@setfontsize\large{14pt}{18}}
-\let\@oldtitle=\title
 \makeatother
 
 % Define alternative (Korean) title macro
 \makeatletter
+\let\@oldtitle=\title
 \renewcommand{\title}{
   \@ifstar{\@kor@title}{\@oldtitle}
 }
@@ -56,8 +56,6 @@
 \DTMsetdatestyle{kordate}
 
 % Set up title styles
-
-% \renewcommand{\abstractname}{\Large Abstract}
 \titleformat{name=\chapter}
   [display]{\LARGE\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
 \titleformat{name=\section}
