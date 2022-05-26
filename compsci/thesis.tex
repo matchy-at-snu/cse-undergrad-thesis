@@ -1,12 +1,11 @@
 \documentclass[11pt]{report}
 \usepackage[
-  a4paper,
-  top=30mm,
-  right=25mm,
-  left=25mm,
-  bottom=30mm,
-  headsep=0mm,
-  footskip=15mm
+    a4paper,
+    top=30mm,
+    right=25mm,
+    left=25mm,
+    footskip=15mm,
+    bottom=30mm
 ]{geometry}
 \usepackage{datetime2}
 \usepackage{setspace} % Set spacing
@@ -68,38 +67,72 @@
 %%
 %% Set up abstract environment
 %%
-\renewenvironment{abstract}
-  {\begin{center}
-    {\Large\bfseries Abstract \\}}
-  {\end{center}}
-\newenvironment{abstract*} % korean
-  {\begin{center}
-    {\Large\bfseries 국문초록 \\}}
-  {\end{center}}
+\renewenvironment{abstract}{
+  \Large
+  \begin{center}
+    \textbf{\abstractname}\vspace{0pt}
+  \end{center}
+  \quotation
+}{
+  \endlist
+}
+\newenvironment{abstract*}{
+  \Large
+  \begin{center}
+    \textbf{국문초록}\vspace{0pt}
+  \end{center}
+  \quotation
+  \normalsize
+}{
+  \endlist
+} % korean
 
 %%
 %% Set up title styles
 %%
 \titleformat{name=\chapter}
-  [display]{\LARGE\bfseries}{\chaptertitlename\ \thechapter}{1em}{}
+  [block] % shape
+  {\Large\bfseries} % format
+  {\chaptertitlename\ \thechapter} % label
+  {1em} % sep
+  {\centering\vspace{0pt}} % before code
+\titlespacing*{\chapter}
+  {0pt}
+  {0pt}
+  {\baselineskip}
 \titleformat{name=\section}
-  [block]{\Large\bfseries}{\thesection}{1em}{}[]
-\titleformat{name=\section,numberless}
-  [block]{\Large\bfseries}{\thesection}{1em}{}[]
+  [block]
+  {\large\bfseries}
+  {Section \thetitle}
+  {1em}
+  {}
+% \titleformat{name=\section,numberless}
+%   [block]
+%   {\large\bfseries}
+%   {\thesection}
+%   {1em}
+%   {}
 
 %%
 %% Set up spacing
 %%
+\titleformat{\subsection}
+  [block]
+  {\fontsize{13pt}{14pt}\bfseries}
+  {Subsection \thetitle}
+  {1em}
+  {}
+
 \doublespacing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%% Basic file information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title{Secure Multiparty Computing (MPC) Module for RSA Keypair Generation and Message Decryption}
-\title*{제목}
+\title{Containerized Secure Multiparty Computing (MPC) Module for RSA Keypair Generation, Encryption and Decryption}
+\title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 (MPC) 모듈}
 
-\author{Matchy Volynskaya}
+\author{Minghang Li}
 \advisor{Bernard Egger}
 
 \begin{document}
@@ -119,14 +152,22 @@
 \pagebreak
 
 \tableofcontents
+\thispagestyle{empty}
+\addtocontents{toc}{\protect\thispagestyle{empty}}
 
 \pagebreak
+
+\setcounter{page}{1}
 
 \chapter{A chapter}
 
 \section{A section}
 
 \subsection{A subsection}
+
+\pagebreak
+
+\input{reference}
 
 \pagebreak
 
