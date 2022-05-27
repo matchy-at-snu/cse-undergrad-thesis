@@ -9,8 +9,18 @@
 ]{geometry}
 \usepackage{datetime2}
 \usepackage{setspace} % Set spacing
-\usepackage{titlesec}
+\usepackage[compact]{titlesec}
 \usepackage{kotex} % Korean support
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+
+%%
+%% Set up footer style
+%%
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}% Remove header rule
+\fancyhead{}
+\fancyfoot[C]{-\ \thepage\ -}
 
 %%
 %% Set up font sizes
@@ -86,54 +96,59 @@
 }{
   \endlist
 } % korean
+%%
 
 %%
 %% Set up title styles
 %%
+
+% chapter
 \titleformat{name=\chapter}
   [block] % shape
   {\Large\bfseries} % format
-  {\chaptertitlename\ \thechapter} % label
+  {\thechapter} % label
   {1em} % sep
   {\centering\vspace{0pt}} % before code
+  [\thispagestyle{fancy}] % after code
 \titlespacing*{\chapter}
   {0pt}
-  {0pt}
+  {-32pt}
   {\baselineskip}
+
+% section
 \titleformat{name=\section}
   [block]
   {\large\bfseries}
-  {Section \thetitle}
+  {\thetitle}
   {1em}
   {}
-% \titleformat{name=\section,numberless}
-%   [block]
-%   {\large\bfseries}
-%   {\thesection}
-%   {1em}
-%   {}
+
+% subsection
+\titleformat{\subsection}
+  [block]
+  {\fontsize{13pt}{14pt}\bfseries}
+  {\thetitle}
+  {1em}
+  {}
+%%
 
 %%
 %% Set up spacing
 %%
-\titleformat{\subsection}
-  [block]
-  {\fontsize{13pt}{14pt}\bfseries}
-  {Subsection \thetitle}
-  {1em}
-  {}
-
 \doublespacing
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%% Basic file information %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%
+%% Basic document info
+%%
 \title{Containerized Secure Multiparty Computing (MPC) Module for RSA Keypair Generation, Encryption and Decryption}
 \title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 (MPC) 모듈}
 
 \author{Minghang Li}
 \advisor{Bernard Egger}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%% Start of Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 
