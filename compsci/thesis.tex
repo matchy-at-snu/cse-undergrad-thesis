@@ -9,14 +9,19 @@
 ]{geometry}
 \usepackage{datetime2}
 \usepackage{setspace} % Set spacing
-\usepackage[compact]{titlesec}
-\usepackage{kotex} % Korean support
+\usepackage{titlesec}
 \usepackage{fancyhdr}
+\usepackage{subfiles}
+\usepackage[backend=biber]{biblatex}
+\usepackage{kotex} % Korean support
 \usepackage{lipsum}
+
+\addbibresource{ref.bib}
 
 %%
 %% Set up footer style
 %%
+% \usepackage{fancyhdr}
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}% Remove header rule
 \fancyhead{}
@@ -65,6 +70,7 @@
 %%
 %% Set up Korean datetime format
 %%
+% \usepackage{datetime2}
 \DTMnewdatestyle{kordate}% label
 {% definitions
   \renewcommand*{\DTMdisplaydate}[4]{%
@@ -101,7 +107,7 @@
 %%
 %% Set up title styles
 %%
-
+% \usepackage{titlesec}
 % chapter
 \titleformat{name=\chapter}
   [block] % shape
@@ -135,6 +141,7 @@
 %%
 %% Set up spacing
 %%
+% \usepackage{setspace}
 \doublespacing
 
 %%
@@ -153,16 +160,16 @@
 \begin{document}
 
 % 외표지
-\input{titlepage}
+\subfile{frontmatters/titlepage.tex}
 
 \pagebreak
 
 % 속표지
-\input{titlepage}
+\subfile{frontmatters/titlepage.tex}
 
 \pagebreak
 
-\input{abstract}
+\subfile{frontmatters/abstract.tex}
 
 \pagebreak
 
@@ -174,18 +181,18 @@
 
 \setcounter{page}{1}
 
-\chapter{A chapter}
-
-\section{A section}
-
-\subsection{A subsection}
+%% Start of chapters
+\subfile{chapters/01_introduction.tex}
 
 \pagebreak
 
-\input{reference}
+% \chapter*{Reference}
+\printbibliography[
+  title={Reference},
+]
 
 \pagebreak
 
-\input{abstract_kor}
+\subfile{frontmatters/abstract_kor.tex}
 
 \end{document}
