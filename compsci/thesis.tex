@@ -13,11 +13,13 @@
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{subfiles}
+\usepackage{hyperref}
 \usepackage{lipsum}
 \usepackage[
   backend=biber,
   style=ieee
 ]{biblatex}
+\usepackage[indent=0pt]{parskip}
 
 \addbibresource{ref.bib}
 
@@ -96,10 +98,11 @@
   \begin{center}
     \textbf{\abstractname}\vspace{0pt}
   \end{center}
-  \quotation
+  \begin{quote}
   \noindent
   \normalsize
 }{
+  \end{quote}
   \endlist
 }
 \newenvironment{abstract*}{
@@ -107,10 +110,11 @@
   \begin{center}
     \textbf{국문초록}\vspace{0pt}
   \end{center}
-  \quotation
+  \begin{quote}
   \noindent
   \normalsize
 }{
+  \end{quote}
   \endlist
 } % korean
 %%
