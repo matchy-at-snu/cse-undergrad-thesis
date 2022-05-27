@@ -28,6 +28,11 @@
 \fancyfoot[C]{-\ \thepage\ -}
 
 %%
+%% Set up fonts
+%%
+\setmainfont      {Times New Roman}
+
+%%
 %% Set up font sizes
 %%
 \makeatletter
@@ -89,6 +94,7 @@
     \textbf{\abstractname}\vspace{0pt}
   \end{center}
   \quotation
+  \normalsize
 }{
   \endlist
 }
@@ -148,7 +154,7 @@
 %% Basic document info
 %%
 \title{Containerized Secure Multiparty Computing (MPC) Module for RSA Keypair Generation, Encryption and Decryption}
-\title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 (MPC) 모듈}
+\title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 모듈}
 
 \author{Minghang Li}
 \advisor{Bernard Egger}
@@ -186,10 +192,10 @@
 
 \pagebreak
 
-% \chapter*{Reference}
 \printbibliography[
   title={Reference},
 ]
+\thispagestyle{empty}
 
 \pagebreak
 
