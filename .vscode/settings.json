@@ -1,3 +1,7 @@
 {
-  "workbench.colorTheme": "Eva Light"
+  "workbench.colorTheme": "Quiet Light",
+  "cSpell.words": [
+    "Adleman",
+    "Boneh"
+  ]
 }
