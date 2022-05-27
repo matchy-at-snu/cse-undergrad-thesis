@@ -7,14 +7,17 @@
     footskip=15mm,
     bottom=30mm
 ]{geometry}
+\usepackage{kotex} % Korean support
 \usepackage{datetime2}
 \usepackage{setspace} % Set spacing
 \usepackage{titlesec}
 \usepackage{fancyhdr}
 \usepackage{subfiles}
-\usepackage[backend=biber]{biblatex}
-\usepackage{kotex} % Korean support
 \usepackage{lipsum}
+\usepackage[
+  backend=biber,
+  style=ieee
+]{biblatex}
 
 \addbibresource{ref.bib}
 
@@ -94,6 +97,7 @@
     \textbf{\abstractname}\vspace{0pt}
   \end{center}
   \quotation
+  \noindent
   \normalsize
 }{
   \endlist
@@ -104,6 +108,7 @@
     \textbf{국문초록}\vspace{0pt}
   \end{center}
   \quotation
+  \noindent
   \normalsize
 }{
   \endlist
@@ -158,6 +163,14 @@
 
 \author{Minghang Li}
 \advisor{Bernard Egger}
+
+% 분문 분량은 논문 규격(A4용지) 기준으로 10-30 Page 정도로 한다.
+% 본문내용 : 글자크기 11pt 정도, 줄간격 170이상, 장평 100, 자간 0
+% 각주 : 글자 크기 9~10pt - 각주 예시1)
+% 서체 : 명조체나 신명조체 류
+% 글씨색 : 흑색(수록 자료는 칼라 가능)
+% 용지 여백 : 위쪽 30, 아래쪽 15, 왼쪽 25, 오른쪽 25
+% 페이지 표시는 각 면 하단 중앙에 위치하게 한다.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%% Start of Document %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
