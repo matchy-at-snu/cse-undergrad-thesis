@@ -15,6 +15,8 @@
 \usepackage{subfiles}
 \usepackage{hyperref}
 \usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage[
   backend=biber,
   style=ieee
@@ -54,14 +56,12 @@
 %%
 \makeatletter
 \let\@oldtitle=\title
-\renewcommand{\title}{
-  \@ifstar{\@kor@title}{\@oldtitle}
-}
-\newcommand{\@kor@title}[1]{%
-  \renewcommand{\@titlealt}{#1}
-}%
+\renewcommand{\title}{\@ifstar\@kor@title\@oldtitle}
 \newcommand{\@titlealt}{%
   \@latex@error{No \noexpand\title* given}\@ehc
+}%
+\newcommand{\@kor@title}[1]{%
+  \renewcommand{\@titlealt}{#1}
 }%
 \makeatother
 
@@ -163,11 +163,11 @@
 %% Basic document info
 %%
 \title{Containerized Secure Multiparty Computing (MPC) Module for RSA Keypair Generation, Encryption and Decryption}
-\title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 모듈}
 
 \author{Minghang Li}
 \advisor{Bernard Egger}
 
+\title*{RSA 키생성 및 암/복호화를 위한 컨테이너화된 안전한 다자간 계산 모듈}
 % 분문 분량은 논문 규격(A4용지) 기준으로 10-30 Page 정도로 한다.
 % 본문내용 : 글자크기 11pt 정도, 줄간격 170이상, 장평 100, 자간 0
 % 각주 : 글자 크기 9~10pt - 각주 예시1)
@@ -206,6 +206,12 @@
 
 %% Start of chapters
 \subfile{chapters/01_introduction.tex}
+\subfile{chapters/02_materials_and_methods.tex}
+\subfile{chapters/03_results.tex}
+\subfile{chapters/04_conclusions.tex}
+\subfile{chapters/05_futurework.tex}
+\subfile{chapters/acknowledgement.tex}
+\subfile{chapters/appendix.tex}
 
 \pagebreak
 
