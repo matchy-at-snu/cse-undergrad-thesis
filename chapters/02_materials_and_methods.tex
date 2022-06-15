@@ -2,24 +2,17 @@
 
 \section{Keypair Generation Algorithm}
 
-Different from a regular RSA key generation process, where $N = pq$, $p$ and $q$ are prime numbers, a distributed modulo has
+The process is further divided into modulus generation, primality test and key generation.
 
-\begin{equation}
-  N = \left( \sum_1^k p_i\right) \left( \sum_1^k q_i \right)
-\end{equation}
+\subsection{Modulus Generation} \label{section:modulus-generation}
 
-During the computation, the value of each $p_i$ and $q_i$ is not explicitly revealed among workers.
+The goal is to generate a modulus $N = \left(\sum_i p_i\right)\left(\sum_i q_i\right)$, where $p_i$ and $q_i$ are private to the participant.
 
-A method described by D. Boneh and M. Franklin (citation) is used. The process is further divided into modulo generation, primality test and key generation.
-
-\subsection{Modulus Generation}
-
-One prime number $P$ satisfying $P > N$ is sent to all workeres.
+A prime number $P$ satisfying $P > N$ is sent to all workers.
 
 Let $l = \left\lfloor \frac{k-1}{2} \right\rfloor $, $\forall i = 1, ..., k$, worker $i$ picks two random degree $l$ polynomials $f_i, g_i \in \mathbb{Z}_P[x]$ satisfying $f_i(0) = p_i$, $g_i(0) = q_i$, and a random degree $2l$ polynomial $h_i \in \mathbb{Z}_P[x]$ satisfying $h_i(0) = 0$.
 
 For all $i = 1, ..., k$, each worker $i$ computes:
-
 \begin{equation}
 \begin{split}
   \forall j = 1, ..., k, \quad & p_{i, j} = f_i(j) \\
@@ -31,43 +24,36 @@ For all $i = 1, ..., k$, each worker $i$ computes:
 Worker $i$ then privately sends the tuple $\left\langle p_{i,j}, q_{i,j}, h_{i,j}\right\rangle$ to server $j$ for all $j \neq i$.
 
 After the communication, each worker $i$ has all of $\left\langle p_{i,j}, q_{i,j}, h_{i,j}\right\rangle, \quad \forall j = 1, ..., k$. Worker $i$ then computes:
-
 \begin{equation}
-    N_i = \left( \sum_{j=1}^{k} p_{j, i}\right)\left( \sum_{j=1}^{k} q_{j, i}\right) + \sum_{j=1}^{k} h_{j,1} (\mod P)
+    N_i = \left( \sum_{j=1}^{k} p_{j, i}\right)\left( \sum_{j=1}^{k} q_{j, i}\right) + \sum_{j=1}^{k} h_{j,1} \pmod{ P}
 \end{equation}
 
 After the computation, $N_i$ is broadcast to all other workers. Now, each worker $j$ has all values of $N_i$ for $i = 1,..., k$.
 
 Let $\alpha(x)$ be the polynomial
-
 \begin{equation}
-  \alpha(x) = \left( \sum_j f_j(x)\right) \left( \sum_j g_j(x)\right) + \sum_j h_j(x) (\mod P)
+  \alpha(x) = \left( \sum_j f_j(x)\right) \left( \sum_j g_j(x)\right) + \sum_j h_j(x) \pmod{ P}
 \end{equation}
 
 Observe that $\alpha(i) = N_i$ and by definition of $f_i$, $g_i$ and $h_i$, we have $\alpha(0) = N$. Furthermore, $\alpha(x)$ is a polynomial of degree $2l$. We note that $l$ is defined in such at way so that $k \leq 2l + 1$. Since all servers have at least $2l + 1$ points on $\alpha(x)$, they can interpolate the points to obtain the coefficients of $\alpha(x)$. Each server finally evaluates $\alpha(0)$ using the interpolated coefficients and obtains $N \mod P$. Since $N < P$, each server learns the correct value of $N$ without disclosing any information.
-
-Note that in the above process $p_{i,j}$ and $q_{i,j}$ are the standard l-out-of-k Shamir sharing of $p_i$ and $q_i$.
 
 \subsection{Primality Test of Modulus}
 
 A random number $g \in \mathbb{Z}_N^*$ is chosen and broadcast to all $k$ workers.
 
 Worker 1 (not necessarily the first worker, just selected to be the "primary" worker) computes:
-
 \begin{equation}
   v_1 = g^{N - p_1 - q_1 + 1}
 \end{equation}
 
 All other workers compute
-
 \begin{equation}
   v_i = g^{p_i + q_i}
 \end{equation}
 
 The workers then exchange the $v_i$ values with each other and verify that
-
 \begin{equation}
-  v_1 = \prod_{i=2}^{k} v_i \quad (\mod N)
+  v_1 = \prod_{i=2}^{k} v_i \quad \pmod{ N}
 \end{equation}
 
 The test is referred as Fermat test for testing that a number is a product of two primes. It is possible that for a $N$ that is not a product of two primes to pass the test, but the density is significantly small (less than $1$ out of $10^{40}$).
@@ -80,79 +66,45 @@ assumed condition we set.
 A number $e$ is chosen and known to all workers.
 
 Worker 1 (not necessarily the first worker, just selected to be the "primary" worker) locally computes:
-
 \begin{equation}
-  \Phi_1 = N - p_1 - q_1 + 1
+  \phi_1 = N - p_1 - q_1 + 1
 \end{equation}
 
 All other workers copmute
-
 \begin{equation}
-  \Phi_i = - p_i - q_i
+  \phi_i = - p_i - q_i
 \end{equation}
 
 It's obvious that
-
 \begin{equation}
-  N = \sum_i \Phi_i, \quad i = 1, ..., k
+  N = \sum_i \phi_i, \quad i = 1, ..., k
 \end{equation}
 
 Then, each worker computes
-
 \begin{equation}
-  \gamma_i = r_i \cdot e + \Phi_i
+  \gamma_i = r_i \cdot e + \phi_i
 \end{equation}
 
 where $r_i$ is a random number decided by the worker. $\gamma_i$ is then shared among all workers. And then all workers can compute:
-
 \begin{equation}
-  \gamma = \sum_i \gamma_i = \Phi + R \cdot e
+  \gamma = \sum_i \gamma_i = \phi + R \cdot e
 \end{equation}
 
 There are $a$ and $b$ such that
-
 \begin{equation}
-  a \cdot \gamma + b \cdot e = 1 \\
+  a \cdot \gamma + b \cdot e = 1, \qquad
   d = a \cdot R + b
 \end{equation}
 
 Then we can compute
-
 \begin{equation}
-  a = \gamma^{-1} (\mod e), \qquad b = \frac{1-a \cdot \gamma}{e}
+  a = \gamma^{-1} \pmod{ e}, \qquad b = \frac{1-a \cdot \gamma}{e}
 \end{equation}
 
 With all the information each worker holds, a usable additive share of $d$ can be:
-
 \begin{equation}
   d_1 = a\cdot r_1 + b, \qquad d_{i \neq 1} = a \cdot r_i
 \end{equation}
-
-\section{Message Encryption and Decryption Algorithm}
-
-In order to communiate with other application of web, we select to use \texttt{RSAES-PKCS1-V1\_5-ENCRYPT} scheme. This scheme uses both RSA and ECB algorithm. First, we split the message to encrypt into $n$ blocks, and then do $RSA$ encryption to each of it. This scheme includes 11 bytes padding, so preprocessing is required for each block. The first two bytes of the padding are \texttt{0x00} and \texttt{0x02}, followed by a randomly generateed 8-byte octet string. The last byte of the padding is \texttt{0x00}. The original message was attached at the end of the padding.
-
-After preprocessing, we do RSA encryption block by block. Let block of string $EM$, then the encrypted message $C$ is
-
-\begin{equation}
-  C = EM^e \mod N
-\end{equation}
-
-And we combine $C$ to make the whole encrypted message $M$.
-
-To decrypt this message $M$, the worker get the input encrypted message $M$ and computes
-
-\begin{equation}
-  s_i = m^{d_i} \mod N
-\end{equation}
-
-The result (called \textit{shadow}) is sent back to the receiver (manager), and manager computes
-
-\begin{equation}
-  s = \prod_i s_i = m^{\sum_i d_i} = m^d \mod N
-\end{equation}
-
-Thus, the valid decrypted message is obtained.
 
 \section{Optimizations}
 
@@ -160,24 +112,123 @@ Many optimizations are applied in various aspects in this project, but the contr
 
 \subsection{Distributed Sieving Algorithm}
 
-In section (), we set $p_i$ and $q_i$ to be random prime numbers and use a primality test to verify whether $N = \left( \sum_1^k p_i\right) \left( \sum_1^k q_i \right)$ only has two prime factors. As the generated key bit length increases, the possibility that $N$ satisfies our requirement decreases quadratically, making this method unpractical for real-world application.
+In \cref{section:modulus-generation}, we set $p_i$ and $q_i$ to be random prime numbers and use a primality test to verify whether $N = \left( \sum_1^k p_i\right) \left( \sum_1^k q_i \right)$ only has two prime factors. As the generated key bit length increases, the possibility that $N$ satisfies our requirement decreases quadratically, making this method unpractical for real-world application.
 
 Distributed Sieving is an important optimization technique to eliminate small prime factors from the generated $N$ by choosing $p_i$ and $q_i$ wisely.
 
-(unfinished)
+When the sieving started, a serires of small prime number is generated, and $M < 2^{\text{factor length}} - 1$ is computed to be the product of all the prime numbers. Each worker then chooses $a_i$ that is coprime to $M$. Note that the product of all $a_i$, $A$:
+\begin{equation}
+  A = \prod_{i=1}^{k}a_i
+\end{equation}
+is also coprime to $M$. We term $a_i$ as a \textit{multiplicative} share of $A$.
+
+Suppose we have some $b_i$ such that:
+\begin{equation}
+  A \pmod{M} = \sum_{i=1}^k b_i \pmod{M}
+\end{equation}
+
+Suppose we let this $b_i$ serve as $p_i$, it is clear that:
+\begin{equation}
+  p = \sum_{i=1}^k p_i  = \sum_{i=1}^k b_i
+\end{equation}
+is also coprime to $M$. We term $b_i$ as the additive share of $A$.
+
+Hence, if each worker selects an $a_i$ coprime to $M$, and the product of all $a_i$, $a$ is converted from a multiplicative share to an additive share securely, we'll be able to obtain a $p_i$ (and $q_i$ using similar methods) whose sum is coprime to $M$. The next step is to use a proper method to perform the conversion.
+
+It would be beneficial to consider the conversion process step by step, one worker at a time. For some $1 \leq l < k$, the value $A_l$ is defined to be the product of value $a_1$ to $a_l$ :
+\begin{equation}
+  \begin{split}
+    A_l &= \prod_{i=1}^l a_i \pmod{M} \\
+        &= a_1 \cdots a_l \pmod{M}
+  \end{split}
+\end{equation}
+Suppose that $a_l$ is already converted to an additive sharing:
+\begin{equation}
+  \begin{split}
+    A_l &= \sum_{i=1}^{l} b_{i,l} \pmod{M} \\
+        &= b_{1,l} + \cdots + b_{k,l} \pmod{M}
+  \end{split}
+\end{equation}
+
+It is possible for us to use the BGW protocol to further convert the value $A_{l+1}$ into additive sharing. Recall the implementation of BGW protocol in \cref{section:modulus-generation}, according to Lagrange interpolation we know that:
+\begin{equation}
+  N = \alpha(0) = \sum_{i=1}^{k}\lambda_i(0)N_i \pmod{P}
+\end{equation}
+where $\lambda_i(0)$ is the Lagrange interpolation coefficient defined by:
+\begin{equation}
+  \lambda_i(x) = \prod_{j \neq i}\frac{x-j}{i-j}
+\end{equation}
+
+If, instead of broadcasting $N_i$, each worker preserves the value $M_i$, which
+is defined as:
+\begin{equation}
+  M_i = \lambda_i(0) N_i \pmod{P}
+\end{equation}
+We can see that in essence we create an additive sharing of the two series $\sum p_i$ and $\sum q_i$. That is to say:
+\begin{equation}
+  \sum_{i=1}^k M_i = N =\left(\sum_{i=1}^{k} p_i\right)\left(\sum_{i=1}^{k} q_i\right)
+\end{equation}
+
+Given the previous assumption, it's possible to re-write the above equation of $a_{l+1}$ as:
+
+\begin{equation}
+  \begin{split}
+    A_{l+1} &= \prod_{i=1}^{l+1} a_i  \pmod{M} \\
+            &= a_{l+1} \cdot \prod_{i=1}^{l} a_i  \pmod{M} \\
+            &= a_{l+1} \cdot \sum_{i=1}^{k} b_{i,l} \pmod{M}
+  \end{split}
+\end{equation}
+
+Then, if we can devise a series $\{u_i\}$ such that:
+\begin{equation}
+  a_{l+1} = \sum_{i=1}^{k} u_i
+\end{equation}
+
+Since BGW protocol can be used to share the product of two sums, we can apply it to safely share $A_{l+1}$ between the participants:
+\begin{equation}
+  A_{l+1} = \sum_{i=1}^k u_i \sum_{i=1}^{k} b_{i,l}
+\end{equation}
+
+The series $\{u_i\}$ described below trivially satisfies the requirement:
+\begin{equation}
+  \left\{
+  \begin{aligned}
+    &u_i = a_i, & \text{if } i = l + 1 \\
+    &u_i = 0, & \text{if } i \neq l + 1
+  \end{aligned}
+  \right.
+\end{equation}
+Starting from $l = 1$, after $k-1$ iterations of this procedure, we will obtain the desired additive sharing of $A$.
+
+Going back to the application in the current application, to apply this procedure, we only need to let worker $1$ computes a series $\{b_{1,j}\}$ with $k$ elemnets, such that:
+\begin{equation}
+  a_1 = \sum_{j=1}^k b_{1,j}
+\end{equation}
+Next, worker $1$ sends $b_{1,j}$ to the corresponding worker $j = 2, 3, \dots, k$. And then the procedure was repeated for $k-1$ times by the following workers to produce the desired additive sharing.
+
+After the procedure is finished, each worker $i$ picks a random number $r_i$ in range $\left[0, \frac{2^n}{M}\right]$ as sets $p_i$ to be:
+\begin{equation}
+  p_i = r_iM + b_i
+\end{equation}
+
+Clearly, the following relationship holds:
+\begin{equation}
+  p = \sum_{i=1}^k p_i \equiv A \mod M
+\end{equation}
+Hence, $p$ is not divisible by all the prime factors of $M$. Similarly, we can apply the same technique for the selection of $q_i$. This pruning will drastically decrease the generation time for the modulus.
 
 \subsection{Parallel Modulus Generation}
 
 The process of modulus generation is a randomized process, even with the help of
-sieving, it’s not guaranteed how many attempts will be gone through before a valid
-modulus 𝑁 is generated.
+sieving, it's not guaranteed how many attempts will be gone through before a valid
+modulus $N$ is generated.
 
 During the generation, the cluster faces many synchronization points where some
 workers must stop computing and wait for other ones to complete the previous
 procedure, leaving some of the CPU threads idle or underutilized. The unbalanced
 work assignment such as in the primality test, worker 1 is taking significantly more computation job than other workers, makes this problem even worse. A simple work balancing will not help since the cluster always needs to wait for one test holder to complete result checking.
 
-Thus, generating modulus and testing in parallel is of great help. In our implementation, when a parallel flag is given, each worker will host an independent modulus generation-test loop until one of them has found a valid 𝑁 , after which all other workers will abort the hosted job and participate the private key generation using the valid 𝑁.
+Thus, generating modulus and testing in parallel is of great help. In our implementation, when a parallel flag is given, each worker will host an independent modulus generation-test loop until one of them has found a valid $N$ , after which all other workers will abort the hosted job and participate the private key generation using the valid $N$.
 
 To eliminate the interference of parallel workflow, each workflow has a unique workflow ID attached when sending messages to other workers. And the data receiving and waiting mechanism is also optimized for this feature.
 
@@ -185,13 +236,9 @@ Theoretically this optimization will massively increase CPU utilization and alth
 
 \section{Implementation}
 
-The application has two different working modes; thus, the architecture differs with different mode.
+The application has two different working modes; thus, the architecture differs with different mode. In worker mode, the application contains two major modules, worker RPC service and worker control module. The worker RPC service manages the communication between other RPC services and is used to form the computation cluster. The worker control module contains the computation logic for key generation and message decryption. Since the worker process does not need to read user console input aside from the starting command line arguments, the worker control module does have any input function. In manager mode, the application contains two major modules, manager RPC service and manager control logic. The manager RPC service communicates to all other RPC services to form the cluster. The manager control module needs to interact with user through command line input to gain information such as worker  URIs.
 
-In worker mode, the application contains two major modules, worker RPC service and worker control module. The worker RPC service manages the communication between other RPC services and is used to form the computation cluster. The worker control module contains the computation logic for key generation and message decryption. Since the worker process does not need to read user console input aside from the starting command line arguments, the worker control module does have any input function.
-
-In manager mode, the application contains two major modules, manager RPC service and manager control logic. The manager RPC service communicates to all other RPC services to form the cluster. The manager control module needs to interact with user through command line input to gain information such as worker nodes URIs.
-
-(figure) shows an example cluster. A cluster includes at least 3 worker nodes and at least 1 manager node. The type of node is determined by the command line argument sent to the application and a client can start work as a worker and a manager simultaneously. The application will start a worker node and/or a manager node and enter the interactive mode of a manager or waiting for a worker to terminate accordingly. The components can be easily transplanted and used in other projects and work in non-interactive mode.
+A cluster includes at least 3 worker nodes and at least 1 manager node. The type of node is determined by the command line argument sent to the application and a client can start work as a worker and a manager simultaneously. The application will start a worker node and/or a manager node and enter the interactive mode of a manager or waiting for a worker to terminate accordingly. The components can be easily transplanted and used in other projects and work in non-interactive mode.
 
 Each worker includes 4 components, the control logic, the RPC sender, the RPC receiver and the data receiver. RPC sender sends RPC request to other workers. Due to the life span of an outgoing RPC call depends on the sending thread’s, an async executor pool for sending requests and optimize it to reduce delays. The RPC receiver receives incoming RPC requests and handles the request to the data receiver or the control logic depending on the RPC type. The workflow is highly parallel, and the information needed for the computation is shared via push messages, thus data receiver uses concurrent maps to store information across different parallel workflows.
 
@@ -201,10 +248,6 @@ The example clusters we are showing are made up with a single manager and multip
 
 The application has a command line user interface and will start at different mode with different starting arguments given. User needs to assign port number for communication and the IP address needs to be input from console for a process in manager mode.
 
-The command line argument parsing is implemented by hand and requires the user to give information in a fixed format.
+The internal implementation of \texttt{WorkerMain} and \texttt{ManagerMain} supports to be used in a non-interactive mode with other code, but the application wrapped around them will always start a manager in interactive mode for demonstration purpose.
 
-The internal implementation of WorkerMain and ManagerMain supports to be used in a non-interactive mode with other code, but the application wrapped around them will always start a manager in interactive mode for demonstration purpose.
-
-In each process, different functional modules are different working phases of one single process, thus no communication interface is needed.
-
-Between processes, the communication is managed by gRPC modules. gRPC is used for defining, sending, and receiving messages, with blocking and unblocking ways.
+In each process, different functional modules are different working phases of one single process, thus no communication interface is needed. Between processes, the communication is managed by gRPC modules. gRPC is used for defining, sending, and receiving messages, with blocking and unblocking ways.
