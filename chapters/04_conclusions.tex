@@ -1,3 +1,5 @@
 \chapter{Conclusion}
 
-  In conclusion, our application works as expected. We’ve successfully implemented a Secure  Multiparty Computation framework for distributed RSA keypair generation and decryption. It is overall easy to use and has good performance.
+In conclusion, our application works as expected. We’ve successfully implemented a Secure  Multiparty Computation framework for distributed RSA keypair generation and decryption. It is overall easy to use and has good performance.
+
+The best application scenario of our work is multiple workers helping one manager to decrypt an incoming encrypted message. owever, although the distributed public key and private key generation is achieved and a message encrypted by the manager can be distributed decrypted successfully, the compatibility with other encryption protocols is not fully implemented. The encryption/decryption protocol we implemented is using the RSA + ECB + PKCS1 standard. However, the encryption protocols used for secure message transmission is more complicated and requires more processing. To support so we may continue to expand our encryption/decryption algorithm or turn to use existing open-source libraries.
