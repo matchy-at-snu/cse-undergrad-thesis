@@ -1,24 +1,67 @@
 
 \chapter{Introduction}
 
-\section{Secure Multiparty Computing (MPC)}
-
-Secure Multiparty Computing (MPC) is a way of enabling a group of data owners to jointly compute a function using all their data as inputs, without disclosing any participant's private input to each other or any third party \cite{evans2018pragmatic}. This idea was first introduced in Yao's discussion on the famous Yao's millionaire problem in the early 1980s \cite{yao1982protocols}. He also raised the first MPC protocol: the Garbled Circuits Protocol \cite{yao1982protocols}, which remains the basis for many current MPC implementations. From then on, various MPC protocols have been proposed.
-
-(discuss MPC protocols, briefly mention garbled circuits and detail on shared secrets)
-
-\subsection{Garbled Circuits}
-
-\subsection{Shamir Key Sharing}
-
 \section{Rivest-Shamir-Adleman (RSA) Algorithm}
 
-(just brief, focus on the concepts)
+Encryption is core to data privacy and secure communication in the world of Computer Science. In year 1976, Whitfield Diffie and Martin Hellman proposed the first asymmetric encryption algorithm \cite{diffie_new_1976}, which makes it possible to complete the decryption without directly exchanging the private key between the participants. An asymmetric algorithm usually generates a public key to be distributed openly to others and a private key kept secret to the owner. If the information encrypted by the public key can only be decrypted by the private key, then as long as the private key is not leaked, the communication is secure. This clever design has inspired many scientists to propose novel asymmetric encryption algorithms. In year 1977, Rivest, Shamir and Adleman proposed the Rivest-Shamir-Adleman (RSA) algorithm \cite{rivest_method_1978}, which is one of the most classic and widely-used asymmetric encryption algorithms up until now.
+
+The RSA algorithm generates the public key and the private key as follows:
+
+\begin{enumerate}
+  \item Select a prime number $p$ and a prime number $q$.
+  \item Compute $n = pq$ and $\phi = (p-1)(q-1)$.
+  \item Select an integer $e$ such that $1 \le e < \phi$ and $\gcd(e, phi) = 1$.
+  \item Compute $d = e^{-1} \mod \phi$.
+\end{enumerate}
+
+As a result, the public key is $\left\{ e, n\right\}$ and the private key is $\left\{ d, n\right\}$. To encrypt a message $M$ with the public key, we use the following formula:
+\begin{equation}
+  C = M^e \bmod n
+\end{equation}
+
+Vice versa, to decrypt a message $C$ with the private key, we use the following formula:
+\begin{equation}
+  M = C^d \bmod n
+\end{equation}
+
+\section{Secure Multiparty Computing (MPC)}
+
+Secure Multiparty Computing (MPC) is a way of enabling a group of data owners to jointly compute a function using all their data as inputs, without disclosing any participant's private input to each other or any third party \cite{evans_pragmatic_2018}. This idea was first introduced in Yao's discussion on the famous Yao's millionaire problem in the early 1980s \cite{yao_protocols_1982}. He also raised the first MPC protocol: the Garbled Circuits (GC) Protocol \cite{yao_protocols_1982}, which remains the basis for many current MPC implementations. From then on, many MPC protocols have been proposed, such as the Goldreich-Micali-Wigderson (GMW) protocol \cite{goldreich_how_2019}, the Ben-Or-Goldwasser-Wigderson (BGW) \cite{ben-or_completeness_2019} protocol and GESS \cite{kolesnikov_gate_2005} protocol. Some of the protocols are designed for only two participants (2-party MPC or 2-PC) or three participants (3-PC), while others can be generalized to many participants. The security level of the protocols also varies: all the protocols listed previously are secure only for
+\textit{semi-honest}
+adversaries who follow the protocol as specified but may try to learn as much as possible from the message they received \cite{evans_pragmatic_2018}. For higher security against
+\textit{malicious}
+adversaries who may deviate from what the protocol required, novel protocols like Cut-and-Choose \cite{chaum_blind_1984} and GMW compiler \cite{goldreich_how_2019} protocols were proposed.
+
+\section{RSA Algorithm under MPC Scenario}
+
+It is possible and suitable to convert RSA algorithm to be a distributed protocol using MPC. Under an MPC scenario, the modulus $N$ and the private key exponent $d$ are split into several parts and shared among the participants. To be specific, instead of directly disclosing $N = pq$ to $k$ participants, we define
+\begin{equation}
+  N = \left( \sum_1^k p_i\right) \left( \sum_1^k q_i \right)
+\end{equation}
+where $p_i$ and $q_i$ are only known to each individual participant $i$. Similarly the private exponent $d$ is also defined by
+\begin{equation}
+  d = \sum_1^k d_i
+\end{equation}
+where each participant $i$ only knows $d_i$ instead of the full $d$. While using the distributed private key to decode message $C$, each participant $i$ only computes a partial decryption (terms \textit{shadow}):
+\begin{equation}
+  s_i = C^{d_i}\mod N
+\end{equation}
+
+The full result can be obtained by the product of all shadows:
+\begin{equation}
+  M = \prod_1^k s_i = C^{\sum d_i}\mod N = C^{d}\mod N
+\end{equation}
+
+The shared modulus generation and shared private key generation is a suitable scenario to apply the BGW protocol. The method of implementation using BGW protocol has been raised by Boneh and Franklin in year 1997 (referred to as BF97)\cite{boneh_efficient_1997}. Although the algorithm is proposed several years ago, there is no recent usable implementation of it.
 
 \section{Background Study of Existing MPC Applications}
 
-According to our research, apart from the primitives and software only for academical uses (e.g., verifying the correctness of the theorems in the paper), there are still many secure multiparty computing frameworks focusing on different techniques and protocols to provide secure computation. However, most of them only support 2PC (two-party computing) or 3PC (three-party computing); some of them are tightly integrated in other frameworks, like CypTen, a MPC library focusing only on building PyTorch applications; some of them focus on non-suitable protocols for RSA keypair generation, such as gabled circuits and zero knowledge proof, like FRESCO and EMP-toolkit; some of them are very difficult to compile and use like SCALE-MAMBA. To sum up, no suitable product has come into market providing a reliable, asy-to-use, dedicated secure multiparty computation application for RSA keypair generation and decryption. Our application aims to fill in such a niche.
+Apart from the primitives and software only for academical uses (e.g., verifying the correctness of the theorems in the paper), there are still many secure multiparty computing frameworks focusing on different techniques and protocols to provide secure computation. However, most of them only support 2PC (two-party computing) or 3PC (three-party computing); some of them are tightly integrated in other frameworks, like \texttt{CrypTen}, a MPC library focusing only on building \texttt{PyTorch} applications \cite{knott_crypten_2021}; some of them focus on non-suitable protocols for RSA keypair generation, such as gabled circuits and zero knowledge proof, like \texttt{FRESCO} \cite{noauthor_aicisfresco_2022} and \texttt{EMP-toolkit} \cite{emp-toolkit}; some of them are very difficult to compile and use like \texttt{SCALE-MAMBA} (a work based on Bendlin et. al.\cite{bendlin_semi-homomorphic_2010}, Damgard et. al.\cite{damgard_multiparty_2011}, Nielsen et. al.\cite{nielsen_new_2011} and Hazay et. al.\cite{hazay_low_2017}). To sum up, no suitable product has come into market providing a reliable, easy-to-use, dedicated secure multiparty computation application for RSA keypair generation and decryption. Our application aims to fill in such a niche.
 
-\section{Motivation and Contribution of This Thesis}
+\section{Motivation}
 
-As is analyzed in the previous sections, The goal and major contribution of this thesis the implementation of a multiparty computing application for RSA key generation and message decryption with containerization support for easier deployment. The process of computation will be t-out-of-k level secure against attackers (the current approach ensures a $l$-outof-$k$ threshold, see Part E) and the communication will be SSL protected.
+As is analyzed in the previous sections, The goal and major contribution described in this report is the implementation of a multiparty computing application for RSA key generation with containerization support for easy deployment.
+
+\section{Division of Work }
+
+This course project was implemented by Minghang Li, Hexiang Geng and Gyeongjun Lee. Minghang Li and Hexiang Geng designed and implemented the overall \texttt{gRPC} master-worker framework. The modulus generation, primality test and Doral private key sharing functions called by the \texttt{gRPC} services were also implemented by Minghang Li. The decryption function was implemented by Gyeongjun Lee. This report will focus on describing the optimizations done by Minghang Li and will only mention briefly the most general abstractions of the other team members' work in order to describe the contribution of Minghang Li.
