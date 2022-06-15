@@ -1,0 +1,6 @@
+\chapter{Future Work}
+
+The best application scenario of our work is multiple workers helping one manager to decrypt an incoming encrypted message. owever, although the distributed public key and private key generation is achieved and a message encrypted by the manager can be distributed decrypted successfully, the compatibility with other encryption protocols is not fully implemented. The encryption/decryption protocol we implemented is using the RSA + ECB + PKCS1 standard. However, the encryption protocols used for secure message transmission is more complicated and requires more processing. To support so we may continue to expand our encryption/decryption algorithm or turn to use existing open-source libraries.
+
+Currently the way that a manager takes in encrypted messages is either through the
+command line in interactive mode or use the decrypt() api provided by the ManagerMain class when using the source code of our project. However, the ideal case should be either the manager works as an https/encrypted RPC server, or our project compiles to a library for easier use with other projects.

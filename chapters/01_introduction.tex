@@ -5,6 +5,20 @@
 
 Secure Multiparty Computing (MPC) is a way of enabling a group of data owners to jointly compute a function using all their data as inputs, without disclosing any participant's private input to each other or any third party \cite{evans2018pragmatic}. This idea was first introduced in Yao's discussion on the famous Yao's millionaire problem in the early 1980s \cite{yao1982protocols}. He also raised the first MPC protocol: the Garbled Circuits Protocol \cite{yao1982protocols}, which remains the basis for many current MPC implementations. From then on, various MPC protocols have been proposed.
 
+(discuss MPC protocols, briefly mention garbled circuits and detail on shared secrets)
+
+\subsection{Garbled Circuits}
+
+\subsection{Shamir Key Sharing}
+
 \section{Rivest-Shamir-Adleman (RSA) Algorithm}
 
-\section{}
+(just brief, focus on the concepts)
+
+\section{Background Study of Existing MPC Applications}
+
+According to our research, apart from the primitives and software only for academical uses (e.g., verifying the correctness of the theorems in the paper), there are still many secure multiparty computing frameworks focusing on different techniques and protocols to provide secure computation. However, most of them only support 2PC (two-party computing) or 3PC (three-party computing); some of them are tightly integrated in other frameworks, like CypTen, a MPC library focusing only on building PyTorch applications; some of them focus on non-suitable protocols for RSA keypair generation, such as gabled circuits and zero knowledge proof, like FRESCO and EMP-toolkit; some of them are very difficult to compile and use like SCALE-MAMBA. To sum up, no suitable product has come into market providing a reliable, asy-to-use, dedicated secure multiparty computation application for RSA keypair generation and decryption. Our application aims to fill in such a niche.
+
+\section{Motivation and Contribution of This Thesis}
+
+As is analyzed in the previous sections, The goal and major contribution of this thesis the implementation of a multiparty computing application for RSA key generation and message decryption with containerization support for easier deployment. The process of computation will be t-out-of-k level secure against attackers (the current approach ensures a $l$-outof-$k$ threshold, see Part E) and the communication will be SSL protected.
